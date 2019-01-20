@@ -20,9 +20,9 @@ In this manner, a load balancer performs the following functions:
 	The choice of load balancing method depends on your needs:
 
 	<ul>
-	  <li>Round Robin – Requests are distributed sequentially  across the group of servers.</li>
-	  <li>Least Connections – A new request is sent to the server with the fewest current connections to clients. </li>
-	  <li>IP Hash – The IP address of the client is used to determine which server receives the request.</li>
+	  <li>Round Robin â€“ Requests are distributed sequentially  across the group of servers.</li>
+	  <li>Least Connections â€“ A new request is sent to the server with the fewest current connections to clients. </li>
+	  <li>IP Hash â€“ The IP address of the client is used to determine which server receives the request.</li>
 	</ul>
 
 	
