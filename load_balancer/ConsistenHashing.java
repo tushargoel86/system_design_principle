@@ -71,11 +71,11 @@ public class ConsistentHashing<T> {
 		
 		System.out.println(consistentHash);
 		String[] userIds = 
-	        {"-84942321036308",
-	        "-76029520310209",
-	        "-68343931116147",
-	        "-54921760962352",
-	        "-114921760962352"
+	        {"-32435466128",
+	        "-23234675788",
+		"-131344666qwew",
+	        "-124324565777",
+	        "-12132565767688"
 	        };
 		
 		
@@ -87,7 +87,7 @@ public class ConsistentHashing<T> {
 		  consistentHash.remove(nodes.get(2));
 
 		  //should not be server 3.
-		  System.out.println(consistentHash.get("-68343931116147"));
+		  System.out.println(consistentHash.get("-124324565777"));
 	}
 
 	@Override
