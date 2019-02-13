@@ -31,7 +31,8 @@ Let’s look at a simple example. A user visits a high-traffic website. Over the
 	<p> Translates URL to IP. Ex: Google uses it heavily and it receives traffic globally and route it to nearest server. </p>
 
  <h4> Google uses DNS Load balancer in following steps: </h4>
-
+  ![](https://github.com/tushargoel86/system_design_principle/blob/master/load_balancer/GoogleDNS.jpg)
+ 
   <ul>
 	  <li> User request for URL </li>
 	  <li> As Google owns DNS server, so this DNS server request Googel LB to provide IP. Google LB has info of all the connected servers, their running status and their IP.</li>
@@ -68,7 +69,7 @@ The problem with this approach is when:
 
 To overcome all this we need to use __Consistent Hashing__
 
-__Consistent Hashing__ maps servers to the key space and assigns requests(mapped to relevant buckets, called load) to the next clockwise server. Consistent hashing assigns requests to the servers in a way that the load is balanced are remains close to equal.
+__Consistent Hashing__ maps servers to the key space and assigns requests(mapped to relevant buckets, called load) to the next clockwise server. Consistent hashing assigns requests to the servers in a way that the load is balanced are remains close to equal. You can see __implementation__ as well.
 
 
 <h3> Sticky and Non Sticky sessions: </h3>
