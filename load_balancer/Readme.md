@@ -74,10 +74,10 @@ __Consistent Hashing__ maps servers to the key space and assigns requests(mapped
 <h3> Sticky and Non Sticky sessions: </h3>
   <p> When you use loadbalancing it means you have several instances of tomcat and you need to divide loads. </p>
 
-<h4>If you're using session replication without sticky session :<h4>
+<h4>If you're using session replication without sticky session :</h4>
 	<p>Imagine you have only one user using your web app, and you have 3 tomcat instances. This user sends several requests to your app, then the loadbalancer will send some of these requests to the first tomcat instance, and send some other of these requests to the secondth instance, and other to the third.</p>
 
-<h4>If you're using sticky session without replication : <h4>
+<h4>If you're using sticky session without replication : </h4>
 	<p>Imagine you have only one user using your web app, and you have 3 tomcat instances. This user sends several requests to your app, then the loadbalancer will send the first user request to one of the three tomcat instances, and all the other requests that are sent by this user during his session will be sent to the same tomcat instance. During these requests, if you shutdown or restart this tomcat instance (tomcat instance which is used) the loadbalancer sends the remaining requests to one other tomcat instance that is still running, BUT as you don't use session replication, the instance tomcat which receives the remaining requests doesn't have a copy of the user session then for this tomcat the user begin a session : the user loose his session and is disconnected from the web app although the web app is still running. </p>
 
 <h4> If you're using sticky session WITH session replication : </h4>
