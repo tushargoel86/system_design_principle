@@ -5,7 +5,7 @@ Cache can exist at all level of architecture.
 </p>
 
 <h5> Different types of cache: </h5>
-  __1)Application server cache:__
+__1)Application server cache:__
   <ul>
 	<li>	Cache directly on Application server </li>
 	<li>	On each request data is fetched from the cache available on App server </li>
@@ -13,7 +13,7 @@ Cache can exist at all level of architecture.
   </ul>
 
 __But how do you scale it?__
-To scale this approach we need to have separate cache on each App server. However if LB distributes the requests than each request may goes to different servers thus increasing cache miss.
+<p> To scale this approach we need to have separate cache on each App server. However if LB distributes the requests than each request may goes to different servers thus increasing cache miss.</p>
 
 __Impact:__
 * Extra n/w request to fetch data
@@ -21,7 +21,7 @@ __Impact:__
 * May cause inconsistent application behavior. How we handle consistency and Cache invalidation for each node.
 
 <p>
-There are 2 __solutions__ for this problem: </p>
+There are 2 solutions for this problem: </p>
 
 __Global cache:__
 * All nodes using same cache
@@ -52,44 +52,49 @@ __Caching strategy is depend upon the data and data access pattern (how data is 
 •	Is unique data returned (search query)
 
 __Cache Aside:__
-* Application first check data into cache
-* If found return directly from the cache
-* If not found than read it from the database, return to the customer and update the cache
+* Application first check data into cache, If found return directly from the cache and If not found than read it from the database,   return to the customer and update the cache
 
-Work best for read heavy application. Ex: Memcache, Redis
-In case of cache failure, request directly goes to the database
-Another benefit is that the data model in cache can be different than the data model in database
-When cache-aside is used, the most common write strategy is to write data to the database directly. When this happens, cache may become inconsistent with the database. To deal with this, developers generally use time to live (TTL) and continue serving stale data until TTL expires. If data freshness must be guaranteed, developers either invalidate the cache entry or use an appropriate write strategy
+* Work best for read heavy application. Ex: Memcache, Redis
+* In case of cache failure, request directly goes to the database
+* Another benefit is that the data model in cache can be different than the data model in database
+
+* When cache-aside is used, the most common write strategy is to write data to the database directly. When this happens, cache may become inconsistent with the database. To deal with this, developers generally use time to live (TTL) and continue serving stale data until TTL expires. If data freshness must be guaranteed, developers either invalidate the cache entry or use an appropriate write strategy
 
 
-Read-Through Cache
+__Read-Through Cache__
 
-Read-through cache sits in-line with the database. When there is a cache miss, it loads missing data from database, populates the cache and returns it to the application.
- 
-Both cache-aside and read-through strategies load data lazily, that is, only when it is first read.
+* Read-through cache sits in-line with the database. When there is a cache miss, it loads missing data from database, populates the cache and returns it to the application.
+
+<p>
+Both cache-aside and read-through strategies load data lazily, that is, only when it is first read. 
+
 While read-through and cache-aside are very similar, there are at least two key differences:
 1.	In cache-aside, the application is responsible for fetching data from the database and populating the cache. In read-through, this logic is usually supported by the library or stand-alone cache provider.
 2.	Unlike cache-aside, the data model in read-through cache cannot be different than that of the database.
 Read-through caches work best for read-heavy workloads when the same data is requested many times. For example, a news story. The disadvantage is that when the data is requested the first time, it always results in cache miss and incurs the extra penalty of loading data to the cache. Developers deal with this by ‘warming’ or ‘pre-heating’ the cache by issuing queries manually. Just like cache-aside, it is also possible for data to become inconsistent between cache and the database, and solution lies in the write strategy.
 
-
+</p>
 
  
-
-Write-Through Cache
+__Write-Through Cache__
 In this write strategy, data is first written to the cache and then to the database. The cache sits in-line with the database and writes always go through the cache to the main database.
  
 Introduce extra write latency because data is written to the cache first and then to the main database.  Can combine with read through cache.
 write is confirmed as success only if writes to DB and the cache BOTH succeed. We will have complete data consistency between cache and storage
-Write-Around
+
+__Write-Around__
+<p>
 Here, data is written directly to the database and only the data that is read makes it way into the cache. However, it increases cache misses because the cache system reads the information from DB incase of a cache miss. As a result of it, this can lead to higher read latency incase of applications which write and re-read the information quickly. Read must be happened from slower back-end storage and experience higher latency.
 Write-around can be combine with read-through and provides good performance in situations where data is written once and read less frequently or never. For example, real-time logs or chatroom messages. Likewise, this pattern can be combined with cache-aside as well.
-Write-Back
-Here, the application writes data to the cache which acknowledges immediately and after some delay, it writes the data back to the database.
- 
-This is sometimes called write-behind as well.
-Use Cases, Pros and Cons
-Write back caches improve the write performance and are good for write-heavyworkloads. When combined with read-through, it works good for mixed workloads, where the most recently updated and accessed data is always available in cache.
+</p>
+
+__Write-Back__
+<p> Here, the application writes data to the cache which acknowledges immediately and after some delay, it writes the data back to the database.
+	
+Write back caches improve the write performance and are good for write-heavyworkloads.
+</p>
+
+ When combined with read-through, it works good for mixed workloads, where the most recently updated and accessed data is always available in cache.
 It’s resilient to database failures and can tolerate some database downtime. If batching or coalescing is supported, it can reduce overall writes to the database, which decreases the load and reduces costs, if the database provider charges by number of requests e.g. DynamoDB. Keep in mind that DAX is write-through so you won’t see any reductions in costs if your application is write heavy. 
 Some developers use Redis for both cache-aside and write-back to better absorb spikes during peak load. The main disadvantage is that if there’s a cache failure, the data may be permanently lost.
 Most relational databases storage engines (i.e. InnoDB) have write-back cache enabled by default in their internals. Queries are first written to memory and eventually flushed to the disk.
