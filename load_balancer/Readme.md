@@ -31,6 +31,7 @@ Let’s look at a simple example. A user visits a high-traffic website. Over the
 	<p> Translates URL to IP. Ex: Google uses it heavily and it receives traffic globally and route it to nearest server. </p>
 
  <h4> Google uses DNS Load balancer in following steps: </h4>
+ 
 ![](https://github.com/tushargoel86/system_design_principle/blob/master/load_balancer/GoogleDNS.jpg)
  
   <ul>
