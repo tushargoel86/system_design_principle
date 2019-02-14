@@ -5,7 +5,7 @@ Cache can exist at all level of architecture.
 </p>
 
 <h5> Different types of cache: </h5>
-__1)Application server cache:__
+__Application server cache:__
   <ul>
 	<li>	Cache directly on Application server </li>
 	<li>	On each request data is fetched from the cache available on App server </li>
@@ -20,8 +20,7 @@ __Impact:__
 * Duplicate data
 * May cause inconsistent application behavior. How we handle consistency and Cache invalidation for each node.
 
-<p>
-There are 2 solutions for this problem: </p>
+<p>There are 2 solutions for this problem: </p>
 
 __Global cache:__
 * All nodes using same cache
@@ -33,12 +32,11 @@ __Distributed cache:__
 * If a request node is looking for a certain piece of data, it can quickly use to hashing function to locate the information within the distributed cache to determine if the data is available. 	
 * By simply adding nodes into Consistent Hashing we can increase or reduce cache size.
 
-<p>
-If a request node is looking for a certain piece of data, it can quickly use to hashing function to locate the information within the distributed cache to determine if the data is available. </p>
+<p>If a request node is looking for a certain piece of data, it can quickly use to hashing function to locate the information within the distributed cache to determine if the data is available. </p>
 
 __Content Distribution Network (CDN)__
-*This is the best solution if our sites serving large amounts of static media
-*We can serve static media off separate subdomain using a lightweight HTTP server like apache and cutover the DNS from your servers to a CDN layer.
+* This is the best solution if our sites serving large amounts of static media
+* We can serve static media off separate subdomain using a lightweight HTTP server like apache and cutover the DNS from your servers to a CDN layer.
 
 __How typical CDN works?__
 * A request will ask the CDN for a piece of static data which is a media.
@@ -47,9 +45,9 @@ __How typical CDN works?__
 * Then it serves the media to the requesting client.
 
 __Caching strategy is depend upon the data and data access pattern (how data is read and written).__
-•	Is heavy system write and in frequent read (logs)
-•	Is heavy system read and in frequent write (user profile)
-•	Is unique data returned (search query)
+* Is heavy system write and in frequent read (logs)
+* Is heavy system read and in frequent write (user profile)
+* Is unique data returned (search query)
 
 __Cache Aside:__
 * Application first check data into cache, If found return directly from the cache and If not found than read it from the database,   return to the customer and update the cache
@@ -74,13 +72,12 @@ While read-through and cache-aside are very similar, there are at least two key 
 Read-through caches work best for read-heavy workloads when the same data is requested many times. For example, a news story. The disadvantage is that when the data is requested the first time, it always results in cache miss and incurs the extra penalty of loading data to the cache. Developers deal with this by ‘warming’ or ‘pre-heating’ the cache by issuing queries manually. Just like cache-aside, it is also possible for data to become inconsistent between cache and the database, and solution lies in the write strategy.
 
 </p>
-
  
 __Write-Through Cache__
-In this write strategy, data is first written to the cache and then to the database. The cache sits in-line with the database and writes always go through the cache to the main database.
+<p>In this write strategy, data is first written to the cache and then to the database. The cache sits in-line with the database and writes always go through the cache to the main database.
  
-Introduce extra write latency because data is written to the cache first and then to the main database.  Can combine with read through cache.
-write is confirmed as success only if writes to DB and the cache BOTH succeed. We will have complete data consistency between cache and storage
+Introduce extra write latency because data is written to the cache first and then to the main database.  Can combine with read through cache. Write is confirmed as success only if writes to DB and the cache BOTH succeed. We will have complete data consistency between cache and storage
+</p>
 
 __Write-Around__
 <p>
@@ -89,20 +86,12 @@ Write-around can be combine with read-through and provides good performance in s
 </p>
 
 __Write-Back__
-<p> Here, the application writes data to the cache which acknowledges immediately and after some delay, it writes the data back to the database.
-	
-Write back caches improve the write performance and are good for write-heavyworkloads.
+<p> Here, the application writes data to the cache which acknowledges immediately and after some delay, it writes the data back to the database. Write back caches improve the write performance and are good for write-heavyworkloads.
+
+When combined with read-through, it works good for mixed workloads, where the most recently updated and accessed data is always available in cache. It’s resilient to database failures and can tolerate some database downtime. 
+
+Some developers use Redis for both cache-aside and write-back to better absorb spikes during peak load. The main disadvantage is that if there’s a cache failure, the data may be permanently lost.
 </p>
 
- When combined with read-through, it works good for mixed workloads, where the most recently updated and accessed data is always available in cache.
-It’s resilient to database failures and can tolerate some database downtime. If batching or coalescing is supported, it can reduce overall writes to the database, which decreases the load and reduces costs, if the database provider charges by number of requests e.g. DynamoDB. Keep in mind that DAX is write-through so you won’t see any reductions in costs if your application is write heavy. 
-Some developers use Redis for both cache-aside and write-back to better absorb spikes during peak load. The main disadvantage is that if there’s a cache failure, the data may be permanently lost.
-Most relational databases storage engines (i.e. InnoDB) have write-back cache enabled by default in their internals. Queries are first written to memory and eventually flushed to the disk.
-
-Cache Eviction policy:
-FIFO
-LIFO
-LRU
-MRU
-LFU
-RR (Random Replacement)
+__Cache Eviction policy:__
+FIFO, LIFO, LRU, MRU, LFU, RR (Random Replacement)
