@@ -2,6 +2,7 @@
 Load Balancer help us to scale horizontally but caching will enable us to make vastly better us of the resources we already have.
 
 Cache can exist at all level of architecture.
+![](https://github.com/tushargoel86/system_design_principle/blob/master/cache/Cache.jpg)
 </p>
 
 <h4> Different types of cache: </h4>
@@ -58,6 +59,8 @@ __Caching strategy is depend upon the data and data access pattern (how data is 
 #### Cache Aside: 
 * Application first check data into cache, If found return directly from the cache and If not found than read it from the database,   return to the customer and update the cache
 
+![](https://github.com/tushargoel86/system_design_principle/blob/master/cache/Cache-Aside.jpg)
+
 * Work best for read heavy application. Ex: Memcache, Redis
 * In case of cache failure, request directly goes to the database
 * Another benefit is that the data model in cache can be different than the data model in database
@@ -68,6 +71,8 @@ __Caching strategy is depend upon the data and data access pattern (how data is 
 #### Read-Through Cache 
 
 * Read-through cache sits in-line with the database. When there is a cache miss, it loads missing data from database, populates the cache and returns it to the application.
+
+![](https://github.com/tushargoel86/system_design_principle/blob/master/cache/Read-Through.jpg)
 
 <p>
 Both cache-aside and read-through strategies load data lazily, that is, only when it is first read. 
@@ -87,17 +92,25 @@ Read-through caches work best for read-heavy workloads when the same data is req
 ### Write-Through Cache
 <p>In this write strategy, data is first written to the cache and then to the database. The cache sits in-line with the database and writes always go through the cache to the main database.
  
+![](https://github.com/tushargoel86/system_design_principle/blob/master/cache/Write-through.png)
+
 Introduce extra write latency because data is written to the cache first and then to the main database.  Can combine with read through cache. Write is confirmed as success only if writes to DB and the cache BOTH succeed. We will have complete data consistency between cache and storage
 </p>
 
 ### Write-Around
 <p>
-Here, data is written directly to the database and only the data that is read makes it way into the cache. However, it increases cache misses because the cache system reads the information from DB incase of a cache miss. As a result of it, this can lead to higher read latency incase of applications which write and re-read the information quickly. Read must be happened from slower back-end storage and experience higher latency.
+Here, data is written directly to the database and only the data that is read makes it way into the cache. However, it increases cache misses because the cache system reads the information from DB incase of a cache miss. As a result of it, this can lead to higher read latency incase of applications which write and re-read the information quickly. Read must be happened from slower back-end storage and experience higher latency.</p>
+
+![](https://github.com/tushargoel86/system_design_principle/blob/master/cache/WriteAround.jpg)
+
+<p>
 Write-around can be combine with read-through and provides good performance in situations where data is written once and read less frequently or never. For example, real-time logs or chatroom messages. Likewise, this pattern can be combined with cache-aside as well.
 </p>
 
 ### Write-Back
 <p> Here, the application writes data to the cache which acknowledges immediately and after some delay, it writes the data back to the database. Write back caches improve the write performance and are good for write-heavyworkloads.
+
+![](https://github.com/tushargoel86/system_design_principle/blob/master/cache/Write-back.jpg)
 
 When combined with read-through, it works good for mixed workloads, where the most recently updated and accessed data is always available in cache. It’s resilient to database failures and can tolerate some database downtime. 
 
