@@ -35,3 +35,43 @@ ShardKey : {deviceId}
 And per given deviceId, it got store into the shard where it lies. ex: if device id is 2444 so
 it comes into 2000 - 3000 range. Hence it will be stored into this range shard.
 </p>
+
+#### Hash Sharding:
+<p>
+  In this type of sharding hash (md5) is used. The Shard Key is being hashed using MD5 algorithm.
+  We than calculate the MD5 of the device id and calculate where that lies (shard is divided base on
+  hash range). Thus it can be consider sub part of Range Sharding.
+  
+  Hash Shard Key (deviceid) = MD5(deviceid)
+  
+  Ensure data is distributed randomly within range of MD5 values:
+    
+    -infinity ---333, ---334 ---500, 500 - AAA ------- +infinity
+</p>
+
+#### Tag-aware Sharding
+<p>
+    Allow subsets of shards to be tagged and assigned to a sub range of the Shard Key.<p>
+  
+  __Example:__ Sharding User Data belongs to users from 200 regions 
+  
+  __Collection:__ Users  
+  
+  __Shard Key:__ {uid, regionCode}
+  
+  | Tag        | Start           | End  |
+| ------------- |:-------------:| -----:|
+| North    | MinKey, MinKey | MaxKey, 100|
+| South     | MinKey, 101      | MaxKey, MaxKey |
+
+
+### Applying Sharding
+  | Tag        | Required Strategy           |
+| ------------- |:-------------:|
+|Scale          | Range or Hash
+|Geo-locality          | Tag Aware
+|Hardware Optimization          | Tag Aware
+|Lower Recovery Times          | Range or Hash
+
+  
+  
