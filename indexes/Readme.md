@@ -126,17 +126,17 @@ Since Non clustered index are stored seprately from the actual data, a table can
 
 #### 3) Unique Index:
 
-Unique index is used to enforce uniqueness of key values in the index. Let's understand this with an example. 
+Unique index is used to enforce uniqueness of key values in the index. Let's understand this with an example. All index created using index keyword are non custered in mysql
 
 We can verify this by;
 
 ```bash
-ALTER TABLE tblEmployee ADD PRIMARY KEY (id)
+CREATE UNIQUE INDEX IX_tblEmployee_Name ON tblEmployee(NAME)
 
 SHOW INDEX FROM tblEmployee
 
-Table		Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment
-tblEmployee	0			PRIMARY			1			id				A		2				\N		\N				BTREE	
+Table	Non_unique Key_name          Seq_in_index Column_name	Collation Cardinality	Null	Index_type	Comment
+tblEmployee	0  IX_tblEmployee_Name	1	   name	          A	        4	 YES	BTREE	
 ```
 
 UNIQUENESS is a property of an Index, and both CLUSTERED and NON-CLUSTERED indexes can be UNIQUE.
@@ -145,8 +145,7 @@ __Note:__
 * By default, a PRIMARY KEY constraint, creates a unique clustered index, where as a UNIQUE constraint creates a unique nonclustered 
 index. These defaults can be changed if you wish to.
 
-* A UNIQUE constraint or a UNIQUE index cannot be created on an existing table, if the table contains duplicate values in the key columns.
- Obviously, to solve this,remove the key columns from the index definition or delete or update the duplicate values
+* A UNIQUE constraint or a UNIQUE index cannot be created on an existing table, if the table contains duplicate values in the key columns.  Obviously, to solve this,remove the key columns from the index definition or delete or update the duplicate values
 
  
 __Diadvantages of Indexes:__
