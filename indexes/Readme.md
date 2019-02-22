@@ -11,9 +11,8 @@
   than we will have to look at every page starting from the first page of the book. 
 
   On, the other hand, if you have the index, you lookup the page number of the chapter in the index,
-  and then directly go to that page number to locate the chapter. 
-  
-  So book index is helping to drastically reduce the time it takes to find the chapter. 
+  and then directly go to that page number to locate the chapter. So book index is helping to drastically
+  reduce the time it takes to find the chapter. 
   
   Similary using the right index improves the performance of queries very much.
 
@@ -25,7 +24,7 @@
 * Unique Constraint Index
 
 
-Let us take an example of empoyee table without any index;
+Let us take an example of __empoyee__ table without any index;
 
 ```bash
 CREATE TABLE tblEmployee (
@@ -51,19 +50,19 @@ id	name	     Salary	Gender
 
 ```
 
-<p> Data saved in the order we entered. We can use explain to chek the performance </p>
+  Data saved in the order we entered. We can use __explain__ command to chek the performance  
 
 ```bash
 
 EXPLAIN (SELECT * FROM tblEmployee WHERE id = 4);
 
-id	select_type	table		type	possible_keys	key	key_len	ref	rows	Extra
-1	SIMPLE	tblEmployee	ALL	 \N		\N				\N	  \N		4			Using where
+id	select_type	table		type	possible_keys	key	  key_len	ref	  rows	Extra
+1	SIMPLE		tblEmployee	ALL		 \N				\N	   \N	    \N		4	 Using where
 ```
 
 We can see here if we need to find a id 4 we need to search all the table. This is called __Table Scan__
-As we need to scan all the tables to check the values. In case of large database there would be __performance issue__.
-So lets use indexes.
+as we need to scan all the table to find the value. In case of large database there would be __performance issue__ due
+to table scan. So lets use indexes than.
 
 #### 1) Clustered Index:
 
@@ -89,12 +88,14 @@ id	name		Salary	Gender
 ```
 
 <p> Now you can see after adding primary key which is clustered index, it stores the Name column as sorted. So, clustered
-index stores data in sorted way that's why no duplicate data can be stored without having change in structure. So now
-if we check again the performance of the query we see we need not to scan whole table. In single search we able to find value </p>
+index stores data in sorted way that's why no duplicate data can be stored without having change in structure.
+
+So now if we check again the performance of the query we see we need not to scan whole table. In single search we able
+to find value </p>
 
 ```bash
 id	select_type	table		type	possible_keys	key		key_len	ref		rows	Extra
-1	SIMPLE		tblEmployee	const	PRIMARY		PRIMARY		4		const		1	
+1	SIMPLE		tblEmployee	const	PRIMARY		PRIMARY		4		const	 1	
 ```
 
 
