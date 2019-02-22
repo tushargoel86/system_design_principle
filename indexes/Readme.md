@@ -27,14 +27,12 @@
 
 Let us take an example of empoyee table without any index;
 
-'''
+```bash
 CREATE TABLE tblEmployee (
-
 	id INT,
 	NAME VARCHAR(50),
 	Salary INT,
-	Gender VARCHAR(10)
-	 
+	Gender VARCHAR(10) 
 )
 
 
@@ -51,7 +49,5 @@ id	name	     Salary	Gender
 3	MM Goel		6500	Female
 2	Mohit Goel	5500	Male
 
+```
 Data saved in the order we entered.
-
-'''
-
