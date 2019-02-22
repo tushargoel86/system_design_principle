@@ -50,4 +50,53 @@ id	name	     Salary	Gender
 2	Mohit Goel	5500	Male
 
 ```
-Data saved in the order we entered.
+
+<p> Data saved in the order we entered. We can use explain to chek the performance </p>
+
+```bash
+
+EXPLAIN (SELECT * FROM tblEmployee WHERE id = 4);
+
+id	select_type	table		type	possible_keys	key	key_len	ref	rows	Extra
+1	SIMPLE	tblEmployee	ALL	 \N		\N				\N	  \N		4			Using where
+```
+
+We can see here if we need to find a id 4 we need to search all the table. This is called __Table Scan__
+As we need to scan all the tables to check the values. In case of large database there would be __performance issue__.
+So lets use indexes.
+
+#### 1) Clustered Index:
+
+<p> In mysql, clustered index created by default using Primary key 
+or unique key. If you do not define a PRIMARY KEY for your table, MySQL locates the first UNIQUE index where all the
+key columns are NOT NULL and InnoDB uses it as the clustered index. 
+
+If the table has no PRIMARY KEY or suitable UNIQUE index, InnoDB internally generates a hidden clustered index 
+named GEN_CLUST_INDEX on a synthetic column containing row ID values
+</p>
+
+
+```bash
+ALTER TABLE tblEmployee ADD PRIMARY KEY (id)
+
+ SELECT * FROM tblEmployee;
+ 
+id	name		Salary	Gender
+1	Tushar Goel	4500	Male
+2	Mohit Goel	5500	Male
+3	MM Goel		6500	Female
+4	TG Goel		1500	Female
+```
+
+<p> Now you can see after adding primary key which is clustered index, it stores the Name column as sorted. So, clustered
+index stores data in sorted way that's why no duplicate data can be stored without having change in structure. So now
+if we check again the performance of the query we see we need not to scan whole table. In single search we able to find value </p>
+
+```bash
+id	select_type	table		type	possible_keys	key		key_len	ref		rows	Extra
+1	SIMPLE		tblEmployee	const	PRIMARY		PRIMARY		4		const		1	
+```
+
+
+
+
