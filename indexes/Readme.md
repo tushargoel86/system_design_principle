@@ -71,7 +71,10 @@ or unique key. If you do not define a PRIMARY KEY for your table, MySQL locates 
 key columns are NOT NULL and InnoDB uses it as the clustered index. 
 
 If the table has no PRIMARY KEY or suitable UNIQUE index, InnoDB internally generates a hidden clustered index 
-named GEN_CLUST_INDEX on a synthetic column containing row ID values
+named GEN_CLUST_INDEX on a synthetic column containing row ID values.
+
+We can have only have 1 clustered index whether primary key or composite key index. To use 
+different clustered index we need to delete older one.
 </p>
 
 
@@ -99,5 +102,65 @@ id	select_type	table		type	possible_keys	key		key_len	ref		rows	Extra
 ```
 
 
+#### 2) Non Clustered Index:
+<p>
+ A non-clustered index (or regular b-tree index) is an index where the order of the rows does not match the physical order of the actual data.  
+ It is instead ordered by the columns that make up the index. 
+ In a non-clustered index, the leaf pages of the index do not contain any actual data, but instead contain pointers to the actual data. 
+ These pointers would point to the clustered index data page where the actual data exists (or the heap page if no clustered index exists on the table).
+</p>
+
+```bash
+ CREATE INDEX IX_tblEmployee_Name ON tblEmployee(NAME)
+
+ SELECT * FROM tblEmployee;
+ 
+id	name		Salary	Gender                      name    	 Row Address
+1	Tushar Goel	4500	Male					Tushar Goel      Row Address
+2	Mohit Goel	5500	Male					Mohit Goel		 Row Address
+3	MM Goel		6500	Female					MM Goel			 Row Address
+4	TG Goel		1500	Female					TG Goel			 Row Address
+```
+
+Since Non clustered index are stored seprately from the actual data, a table can have more than one non clsutered index.
+
+#### 3) Unique Index:
+
+Unique index is used to enforce uniqueness of key values in the index. Let's understand this with an example. 
+
+We can verify this by;
+
+```bash
+ALTER TABLE tblEmployee ADD PRIMARY KEY (id)
+
+SHOW INDEX FROM tblEmployee
+
+Table		Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment
+tblEmployee	0			PRIMARY			1			id				A		2				\N		\N				BTREE	
+```
+
+UNIQUENESS is a property of an Index, and both CLUSTERED and NON-CLUSTERED indexes can be UNIQUE.
+
+__Note:__
+* By default, a PRIMARY KEY constraint, creates a unique clustered index, where as a UNIQUE constraint creates a unique nonclustered 
+index. These defaults can be changed if you wish to.
+
+* A UNIQUE constraint or a UNIQUE index cannot be created on an existing table, if the table contains duplicate values in the key columns.
+ Obviously, to solve this,remove the key columns from the index definition or delete or update the duplicate values
+
+ 
+__Diadvantages of Indexes:__
+
+__Additional Disk Space:__ 
+Clustered Index does not, require any additional storage. Every Non-Clustered index requires additional space as it is 
+stored separately from the table.The amount of space required will depend on the size of the table, and the number and types of columns used in the index.
+
+__Insert Update and Delete statements can become slow:__ 
+When DML (Data Manipulation Language) statements (INSERT, UPDATE, DELETE) modifies data in a table,
+the data in all the indexes also needs to be updated. Indexes can help, to search and locate the rows, that we want to delete, but too many indexes to update can actually hurt the performance of data modifications.
+
+__What is a covering query?__
+If all the columns that you have requested in the SELECT clause of query, are present in the index, then there is no need to lookup in the table again. The requested columns data can simply be returned from the index.
 
 
+A clustered index, always covers a query, since it contains all of the data in a table. A composite index is an index on two or more columns. Both clustered and nonclustered indexes can be composite indexes. To a certain extent, a composite index, can cover a query.
