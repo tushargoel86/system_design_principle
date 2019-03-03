@@ -20,7 +20,7 @@
 * __Application Development productivity:__ Lots of time spend on mapping data between in memory DS and
 					relational database. This is called __impedance mismatch__.
 					
-	![](images/1.1)
+	![](https://github.com/tushargoel86/system_design_principle/blob/master/NoSql/images/RelationalDatabase.png)
 					
 
 __Impedance mismatch:__ Relational tuples should be simple only. It can't store relatonas (like nested record ot list)
@@ -58,23 +58,31 @@ interact with as a unit. it forms the boundaries for ACID operations with the da
 
 Aggregate make it eaiser for the database to mange data storage over cluster.
 </p>
+
 #### Types of Data Model in NoSQL:
-1) Key-Value type
-2) Document based
-3) Column based Family
-4) Graph Database
+* Key-Value type
+* Document based
+* Column based Family
+* Graph Database
+ 
 
+__Key Value Data model__:
+<p>Key - value based. Search the database using key. Value can be any of type data, images etc.. similar to
+Hash Map. In this aggregate is Key. 
+</p>
 
-Key Value Data model: Key - value based. Search the database using key. Value can be any of type data, images etc.. similar to
-						Hash Map. In this aggregate is Key. 
-						
-Document Data Model: In this model, database as a storage of different documents. Each document is model of different complex datastructure.
-					 This datastructure is mostly is JSON or XML. We query the database using document parameter and update portion of it.
-					 Database can create index based on the contents of the aggregates.
-					 
+![](https://github.com/tushargoel86/system_design_principle/blob/master/NoSql/images/KeyValue.png)
 
-Column DataModel: More like map of map. Where we want few columns of many rows.
+__Document Data Model:__ 
+<p> In this model, database as a storage of different documents. Each document is model of different complex datastructure. This datastructure is mostly is JSON or XML. We query the database using document parameter and update portion of it.
+Database can create index based on the contents of the aggregates. </p>
 
+![](https://github.com/tushargoel86/system_design_principle/blob/master/NoSql/images/Document.png)
+
+__Column DataModel:__ 
+<p> More like map of map. Where we want few columns of many rows. </p>
+
+![](https://github.com/tushargoel86/system_design_principle/blob/master/NoSql/images/ColumnDatabase.png)
 
 ## Distribution Models:
 
@@ -99,6 +107,8 @@ In this data is distributed on different servers. This distribution is depends u
 on different servers but 1 aggregate i stored on 1 machine. This aggregrate can be location specific or order id or anything..
 It basically helps to improve read and write performance as different data is stored on different machines and hence can be
 accessed separtely.
+
+![](https://github.com/tushargoel86/system_design_principle/blob/master/NoSql/images/sharding.PNG)
 				
 Using replication with cache greatly improves the read performance but doesn't improve write perfromance much.
 
@@ -116,6 +126,8 @@ read request and ensuring all read reqeuest are routed to the Slaves.  One of th
 Should the master failed, slaves can be used for read operations.
 
 But we are still limited with the ability of the master to process updates/write.
+
+![](https://github.com/tushargoel86/system_design_principle/blob/master/NoSql/images/Master-Slave.PNG)
 
 As this is limited to ability of Master to perform Write operation, so this is not good approach for write specific operations.
 However, having slaves as replicates of Master does speed up the recovery after master failure since a slaves can be appointed 
@@ -135,6 +147,8 @@ Also, it may possible that during update master can failed so no sync between th
 As Master slaves models does little to provide write specific work (or master failure) Peer to Peer model handle this shortcoming.
 In this all the replicas have equal weight, they can accept all writes and the loss of any of them doesn't prevent access to
 the datastore.
+	
+![](https://github.com/tushargoel86/system_design_principle/blob/master/NoSql/images/PeerToPeer.PNG)
 
 We can handle node failure without any data loss and also can add more nodes to improve performance.
 
@@ -142,7 +156,7 @@ Again, with this model we have issue with the consistency. When we write to 2 di
 the same record by 2 different people at same times - a write-write conflict.
 </p>
 
-######We can solve this conflict by 2 ways:
+###### We can solve this conflict by 2 ways:
 * We can ensure that whenever any write happened it should coordinate with another nodes before write and in case of majority
   decision we can write it. Though this envolves network traffic as a node has to commuicate with all the nodes.
   
@@ -153,4 +167,8 @@ the same record by 2 different people at same times - a write-write conflict.
 <p>
 Master-slave replication reduces the chance of update conflicts but peer to peer repliccation avoids loading all writes onto a
 single point of failure.
+</p>
+
+<p> .. More to come...
+	
 </p>
