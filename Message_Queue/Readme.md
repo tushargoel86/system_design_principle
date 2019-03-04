@@ -68,7 +68,7 @@ and distributes it orders to order nearest shops.
 * __Rabbit Q__ has default exchange nameless exchange. Here routing key matches with the queue name.
 
 
-##### Benefits of using Message Queue:
+#### Benefits of using Message Queue:
 
 
 1.	__Decoupling__ Producers and consumers are independent and can evolve and innovate seperately at their own rate. 
