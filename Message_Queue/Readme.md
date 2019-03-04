@@ -1,4 +1,4 @@
-###What is a Message Queue?
+### What is a Message Queue?
 <p>
 Let's explain the same using the example of Pizza shop.
 
@@ -9,6 +9,8 @@ number is generated. These orders are processed in inserting order.
 Now, in the shop kitchen pizza's are being prepared. A employee there got information about the order and 
 start preparing it. Both the front desk and pizza preparing person shares same DS so that it also recieves
 order in same order. Once order is completed and employee at front desk deliver to the customer at front desk.
+
+![](https://github.com/tushargoel86/system_design_principle/blob/master/Message_Queue/images/pizzaExample.png)
 
 Now considering, your pizza shop start getting popular and you have opened different branches in city and start
 delivering it. 
@@ -37,6 +39,7 @@ and distributes it orders to order nearest shops.
 * Notifiation to check Hearbeat
 
 <p> So, for this Message/Task queue comes into picture. What it does: </p>
+
 * It takes a task
 * Store the task
 * Distribute the task to the servers
@@ -47,13 +50,15 @@ and distributes it orders to order nearest shops.
 
 #### How does Message Queue works ?
 
+![](https://github.com/tushargoel86/system_design_principle/blob/master/Message_Queue/images/MessageQueue.png)
+
 * Publishing message means produces message and send to exchange.. Exchange than route the message to queue. 
 * Consuming means Consumer than consume this message from the queue itself.
-* Producer can’t send message directly to queue.
+* Producer canâ€™t send message directly to queue.
 * Exchange connects to queue using Binding and Binding Key. Each queue has its own binding key.
 * To send a message, producer needs to send routing key. Exchange than compare this with binding key as per type of exchange.
 
-####Types of exchange:
+#### Types of exchange:
 
 
 * __Fanout:__  Ignores routing key and forwards message to all the queue.
